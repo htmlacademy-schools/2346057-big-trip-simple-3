@@ -19,24 +19,24 @@ const createOffersTemplate = (type, offers) => {
   return template;
 };
 
-  const createTripEventTemplate = (tripInfo) => {
-    const {dateFrom, dateTo, offers, type, destination, basePrice} = tripInfo;
+const createTripEventTemplate = (tripInfo) => {
+  const {dateFrom, dateTo, offers, type, destination, basePrice} = tripInfo;
   
-    const tripDate = dateFrom !== null
-      ? getDate(dateFrom)
-      : 'No data';
+  const tripDate = dateFrom !== null
+    ? getDate(dateFrom)
+    : 'No data';
   
-    const tripTimeFrom = dateFrom !== null
-      ? getTime(dateFrom)
-      : 'No time';
+  const tripTimeFrom = dateFrom !== null
+    ? getTime(dateFrom)
+    : 'No time';
   
-    const tripTimeTo = dateTo !== null
-      ? getTime(dateTo)
-      : 'No time';
+  const tripTimeTo = dateTo !== null
+    ? getTime(dateTo)
+    : 'No time';
   
-    const destinationName = destination !== null
-      ? destination.name
-      : 'No destination';
+  const destinationName = destination !== null
+     ? destination.name
+    : 'No destination';
     return `
       <div class="event">
         <time class="event__date" datetime="2019-03-18">${tripDate}</time>
@@ -63,7 +63,7 @@ const createOffersTemplate = (type, offers) => {
       </button>
     </div>
     `
-  };
+};
 
 class TripEventView extends BaseView {
     constructor(tripInfo) {
