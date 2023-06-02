@@ -7,15 +7,17 @@ import EventListSortingView from '../view/event-list-sorting-view.js';
 class TripPresenter {
   tripEventsList = new TripEventsListView();
 
-  init(container) {
+  init(container, tripEventsModel) {
     this.container = container;
+    this.tripEventsModel = tripEventsModel;
+    this.tripTasks = [...this.tripEventsModel.getTripEvents()];
 
     render(new EventListSortingView(), this.container);
     render(this.tripEventsList, this.container);
-    this.tripEventsList.addEvent(new EventEditorView());
+    this.tripEventsList.addEvent(new EventEditorView(this.tripTasks[0]));
 
-    for (let i = 0; i < 3; i++) {
-      this.tripEventsList.addEvent(new TripEventView());
+    for (let i = 1; i < this.tripTasks.length; i++) {
+      this.tripEventsList.addEvent(new TripEventView(this.tripTasks[i]));
     }
   }
 }
