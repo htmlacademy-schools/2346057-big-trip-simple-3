@@ -136,7 +136,7 @@ const createEventEditorTemplate = (tripInfo) => {
         <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${tripDateFrom}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${tripDateFrom}">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${tripDateTo}">
       </div>
       <div class="event__field-group  event__field-group--price">
         <label class="event__label" for="event-price-1">

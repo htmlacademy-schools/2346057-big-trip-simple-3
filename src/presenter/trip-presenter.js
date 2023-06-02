@@ -17,7 +17,7 @@ class TripPresenter {
     this.tripEventsList.addEvent(new EventEditorView(this.tripTasks[0]));
 
     for (let i = 1; i < this.tripTasks.length; i++) {
-        this.tripEventsList.addEvent(new TripEventView(this.tripTasks[i]));
+      this.tripEventsList.addEvent(new TripEventView(this.tripTasks[i]));
     }
   }
 }

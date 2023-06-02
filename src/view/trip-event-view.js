@@ -3,22 +3,22 @@ import { OFFERS_BY_TYPE } from '../mock/trip-event.js';
 import BaseView from './base-view.js';
 
 const createOffersTemplate = (type, offers) => {
-    let template = '';
-    const allOffers = OFFERS_BY_TYPE[`${type}`].offers;
-    Object.values(allOffers).forEach(({id, title, price}) => {
-      if (offers.includes(id)) {
-        template += `
-          <li class="event__offer">
-            <span class="event__offer-title">${title}</span>
-            &plus;&euro;&nbsp;
-            <span class="event__offer-price">${price}</span>
-          </li>
-          `;
-      }
-    });
-    return template;
-  };
-  
+  let template = '';
+  const allOffers = OFFERS_BY_TYPE[`${type}`].offers;
+  Object.values(allOffers).forEach(({id, title, price}) => {
+    if (offers.includes(id)) {
+      template += `
+      <li class="event__offer">
+      <span class="event__offer-title">${title}</span>
+      &plus;&euro;&nbsp;
+      <span class="event__offer-price">${price}</span>
+      </li>
+      `;
+    }
+  });
+  return template;
+};
+
   const createTripEventTemplate = (tripInfo) => {
     const {dateFrom, dateTo, offers, type, destination, basePrice} = tripInfo;
   
