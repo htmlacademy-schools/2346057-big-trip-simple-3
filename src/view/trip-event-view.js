@@ -1,6 +1,6 @@
 import { getDate, getTime } from '../utils.js';
 import { OFFERS_BY_TYPE } from '../mock/trip-event.js';
-import BaseView from './base-view.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 const createOffersTemplate = (type, offers) => {
   let template = '';
@@ -67,17 +67,31 @@ const createTripEventTemplate = (tripInfo) => {
   `;
 };
 
-class TripEventView extends BaseView {
+class TripEventView extends AbstractView {
   #info = null;
 
-  constructor(tripInfo) {
+  constructor(info) {
     super();
-    this.#info = tripInfo;
+    this.#info = info;
   }
 
   get template() {
     return createTripEventTemplate(this.#info);
   }
+
+  setEditClickListener = (callback) => {
+    this._callback.openEditor = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
+  };
+
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.openEditor();
+  };
+
+  removeEditClickListener = () => {
+    this.element.querySelector('.event__rollup-btn').removeEventListener('click', this.#editClickHandler);
+  };
 }
 
 export default TripEventView;

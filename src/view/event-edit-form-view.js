@@ -1,6 +1,6 @@
 import { getFullDataTime } from '../utils.js';
 import { OFFERS_BY_TYPE, DESTINATION_NAMES } from '../mock/trip-event.js';
-import BaseView from './base-view.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 const createDestinationTemplate = (destination) => {
   const {description, pictures} = destination;
@@ -154,17 +154,81 @@ const createEventEditorTemplate = (tripInfo) => {
   `;
 };
 
-class EventEditorView extends BaseView {
+class EventEditFormView extends AbstractView {
   #info = null;
 
-  constructor(tripInfo) {
+  constructor(info) {
     super();
-    this.#info = tripInfo;
+    this.#info = info;
   }
 
   get template() {
     return createEventEditorTemplate(this.#info);
   }
+
+  setCloseButtonClickListener = (callback) => {
+    this._callback.closeForm = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#closeButtonClickHandler);
+  };
+
+  #closeButtonClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.closeForm();
+  };
+
+  setFormSubmitListener = (callback) => {
+    this._callback.saveForm = callback;
+    this.element.querySelector('form').addEventListener('submit', this.#formSaveHandler);
+  };
+
+  #formSaveHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.saveForm();
+  };
+
+  setDeleteButtonClickListener = (callback) => {
+    this._callback.delete = callback;
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#deleteButtonClickHandler);
+  };
+
+  #deleteButtonClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.delete();
+  };
+
+  setEscKeydownListener = (callback) => {
+    this._callback.escClose = callback;
+    document.addEventListener('keydown', this.#escKeydownHandler);
+  };
+
+  #escKeydownHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.escClose();
+  };
+
+  removeEscKeydownListener = () => {
+    document.removeEventListener('keydown', this.#escKeydownHandler);
+  };
+
+  removeDeleteButtonClickListener = () => {
+    this.element.querySelector('.event__reset-btn').removeEventListener('click', this.#deleteButtonClickHandler);
+  };
+
+  removeFormSubmitListener = () => {
+    this.element.querySelector('form').removeEventListener('submit', this.#formSaveHandler);
+  };
+
+  removeCloseButtonClickListener = () => {
+    this.element.querySelector('.event__rollup-btn').removeEventListener('click', this.#closeButtonClickHandler);
+  };
+
+  removeAllListeners = () => {
+    this.removeEscKeydownListener();
+    this.removeDeleteButtonClickListener();
+    this.removeFormSubmitListener();
+    this.removeCloseButtonClickListener();
+    this._callback = {};
+  };
 }
 
-export default EventEditorView;
+export default EventEditFormView;

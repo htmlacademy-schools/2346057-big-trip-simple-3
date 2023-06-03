@@ -1,4 +1,4 @@
-import BaseView from './base-view.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 const createEventFiltersTemplate = () => `
   <form class="trip-filters" action="#" method="get">
@@ -14,7 +14,7 @@ const createEventFiltersTemplate = () => `
   </form>
 `;
 
-class EventFiltersView extends BaseView {
+class EventFiltersView extends AbstractView {
   get template() {
     return createEventFiltersTemplate();
   }

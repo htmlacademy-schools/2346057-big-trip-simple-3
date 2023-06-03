@@ -1,5 +1,5 @@
 import TripPresenter from './presenter/trip-presenter.js';
-import { render } from './render.js';
+import { render } from './framework/render.js';
 import EventFiltersView from './view/event-filters-view.js';
 import TripEventsModel from './model/trip-events-model.js';
 
