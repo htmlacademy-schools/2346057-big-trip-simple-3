@@ -15,7 +15,7 @@ const createEventFiltersTemplate = () => `
 `;
 
 class EventFiltersView extends BaseView {
-  getTemplate() {
+  get template() {
     return createEventFiltersTemplate();
   }
 }

@@ -10,7 +10,7 @@ const createDestinationTemplate = (destination) => {
     picturesSection += `<img class="event__photo" src="${src}" alt="${photoDescription}">`;
   });
 
-  return (destination) ? `
+  return `
     <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${description}</p>
@@ -20,7 +20,15 @@ const createDestinationTemplate = (destination) => {
           </div>
         </div>
       </section>
-  ` : '';
+  `;
+};
+
+const createDestinationListTemplate = () => {
+  let template = '';
+  DESTINATION_NAMES.forEach((name) => {
+    template += `<option value="${name}"></option>`;
+  });
+  return template;
 };
 
 const createOffersTemplate = (type, offers) => {
@@ -76,15 +84,7 @@ const createTypeImageTemplate = (currentType) => {
   return template;
 };
 
-const createDestinationListTemplate = () => {
-  let template = '';
-  DESTINATION_NAMES.forEach((name) => {
-    template += `<option value="${name}"></option>`;
-  });
-  return template;
-};
-
-const createEventEditorTemplate = (tripInfo) => {
+const createNewEventFormTemplate = (tripInfo) => {
   const {dateFrom, dateTo, offers, type, destination, basePrice} = tripInfo;
 
   const tripDateFrom = dateFrom !== null
@@ -100,7 +100,7 @@ const createEventEditorTemplate = (tripInfo) => {
     : 'No destination';
 
   return `
-  <li class="trip-events__item">
+<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
@@ -118,7 +118,7 @@ const createEventEditorTemplate = (tripInfo) => {
       </div>
       <div class="event__field-group  event__field-group--destination">
         <label class="event__label  event__type-output" for="event-destination-1">
-        ${type}
+          ${type}
         </label>
         <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationName}" list="destination-list-1">
         <datalist id="destination-list-1">
@@ -130,7 +130,7 @@ const createEventEditorTemplate = (tripInfo) => {
         <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${tripDateFrom}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${tripDateTo}">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${tripDateTo}"">
       </div>
       <div class="event__field-group  event__field-group--price">
         <label class="event__label" for="event-price-1">
@@ -140,30 +140,28 @@ const createEventEditorTemplate = (tripInfo) => {
         <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
       </div>
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-      <button class="event__reset-btn" type="reset">Delete</button>
-      <button class="event__rollup-btn" type="button">
-        <span class="visually-hidden">Open event</span>
-      </button>
+      <button class="event__reset-btn" type="reset">Cancel</button>
     </header>
     <section class="event__details">
       ${createOffersTemplate(type, offers)}
       ${createDestinationTemplate(destination)}
     </section>
   </form>
-  </li>
+</li>
 `;
 };
 
-class EventEditorView extends BaseView {
+class NewEventFormView extends BaseView {
   #info = null;
+
   constructor(tripInfo) {
     super();
     this.#info = tripInfo;
   }
 
   get template() {
-    return createEventEditorTemplate(this.#info);
+    return createNewEventFormTemplate(this.#info);
   }
 }
 
-export default EventEditorView;
+export default NewEventFormView;
