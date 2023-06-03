@@ -18,6 +18,20 @@ class EventFiltersView extends AbstractView {
   get template() {
     return createEventFiltersTemplate();
   }
+
+  get selectedFilter() {
+    return this.element.querySelector('.trip-filters__filter-input:checked')?.value || '';
+  }
+
+  setFilterChangeListener = (callback) => {
+    this._callback.chageFilter = callback;
+    this.element.addEventListener('change', this.#filterChangeHandler);
+  };
+
+  #filterChangeHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.chageFilter();
+  };
 }
 
 export default EventFiltersView;
