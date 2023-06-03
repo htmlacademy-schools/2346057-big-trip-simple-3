@@ -8,7 +8,7 @@ class TripEventsListView extends BaseView {
   get template() {
     return createTripEventsListTemplate();
   }
-  
+
   isNewFormOrEditorOpen = () => this.element.querySelector('.event--edit');
 }
 
