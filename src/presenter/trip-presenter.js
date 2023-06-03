@@ -50,6 +50,13 @@ class TripPresenter {
       }
     };
 
+    const replaceFormToTask = () => {
+      taskEditFormComponent.removeAllListeners();
+      taskComponent.setEditClickListener(replaceTaskToForm);
+      replace(taskComponent, taskEditFormComponent);
+      remove(taskEditFormComponent);
+    };
+
     const replaceTaskToForm = () => {
       if (!this.#tripEventsList.isNewFormOrEditorOpen()){
         taskEditFormComponent = new EventEditFormView(task);
@@ -59,13 +66,6 @@ class TripPresenter {
         taskEditFormComponent.setEscKeydownListener(replaceFormToTask);
         replace(taskEditFormComponent, taskComponent);
       }
-    };
-
-    const replaceFormToTask = () => {
-      taskEditFormComponent.removeAllListeners();
-      taskComponent.setEditClickListener(replaceTaskToForm);
-      replace(taskComponent, taskEditFormComponent);
-      remove(taskEditFormComponent);
     };
 
     taskComponent.setEditClickListener(replaceTaskToForm);
