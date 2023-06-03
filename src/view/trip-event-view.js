@@ -68,6 +68,8 @@ const createTripEventTemplate = (tripInfo) => {
 };
 
 class TripEventView extends BaseView {
+  #info = null;
+
   constructor(tripInfo) {
     super();
     this.#info = tripInfo;
