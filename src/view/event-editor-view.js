@@ -156,7 +156,7 @@ const createEventEditorTemplate = (tripInfo) => {
 
 class EventEditorView extends BaseView {
   #info = null;
-  
+
   constructor(tripInfo) {
     super();
     this.#info = tripInfo;
