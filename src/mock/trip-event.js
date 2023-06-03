@@ -48,7 +48,7 @@ const generateRandomDates = (date = null) => {
   };
 };
 
-const destinationNames = [
+const DESTINATION_NAMES = [
   'Moscow',
   'SPB',
   'Voroneg',
@@ -57,7 +57,7 @@ const destinationNames = [
 ];
 
 const destinations = {};
-destinationNames.forEach((name, index) => {
+DESTINATION_NAMES.forEach((name, index) => {
   const id = index + 1;
   destinations[`${id}`] = {
     id,
@@ -99,7 +99,7 @@ const generateOffersIds = (type) => {
   return offersIds;
 };
 
-const getRandomDestination = () => destinations[`${getRandomInt(1, destinationNames.length)}`];
+const getRandomDestination = () => destinations[`${getRandomInt(1, DESTINATION_NAMES.length)}`];
 
 const generateTripEvents = (eventsNumber) => {
   const events = new Array(eventsNumber);
@@ -120,4 +120,4 @@ const generateTripEvents = (eventsNumber) => {
   return events;
 };
 
-export { generateTripEvents, OFFERS_BY_TYPE };
+export { generateTripEvents, OFFERS_BY_TYPE, DESTINATION_NAMES };
