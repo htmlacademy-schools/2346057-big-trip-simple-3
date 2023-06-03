@@ -1,28 +1,29 @@
-import { render, replace, remove } from '../framework/render.js';
+import { render } from '../framework/render.js';
 import TripEventsListView from '../view/trip-events-list-view.js';
-import EventEditFormView from '../view/event-edit-form-view.js';
-import TripEventView from '../view/trip-event-view.js';
 import EventListSortingView from '../view/event-list-sorting-view.js';
 import EmptyListView from '../view/empty-list-view.js';
+import TripEventPresenter from './trip-event-presenter.js';
+import { updateItem } from '../utils.js';
 
 class TripPresenter {
   #tripEventsList = new TripEventsListView();
   #eventSorter = new EventListSortingView();
+  #tripEventPresenter = new Map();
   #container;
   #tripEventsModel;
-  #tripTasks;
+  #tripEvents;
 
   init(container, tripEventsModel) {
     this.#container = container;
     this.#tripEventsModel = tripEventsModel;
-    this.#tripTasks = [...this.#tripEventsModel.tripEvents];
+    this.#tripEvents = this.#tripEventsModel.tripEvents;
 
     render(this.#eventSorter, this.#container);
     render(this.#tripEventsList, this.#container);
 
-    if (this.#tripTasks.length){
-      for (let i = 0; i < this.#tripTasks.length; i++) {
-        this.#renderTask(this.#tripTasks[i]);
+    if (this.#tripEvents.length){
+      for (let i = 0; i < this.#tripEvents.length; i++) {
+        this.#renderEvent(this.#tripEvents[i]);
       }
     } else {
       this.#renderEmptyList();
@@ -34,43 +35,18 @@ class TripPresenter {
     render(emptyListComponent, this.#container);
   };
 
-  #renderTask = (task) => {
-    const taskComponent = new TripEventView(task);
-    let taskEditFormComponent;
+  #renderEvent = (task) => {
+    const tripEventPresenter = new TripEventPresenter(this.#tripEventsList, this.#handleEventChange, this.#handleModeChange);
+    tripEventPresenter.init(task);
+    this.#tripEventPresenter.set(task.id, tripEventPresenter);
+  };
+  #handleEventChange = (updatedEvent) => {
+    this.#tripEvents = updateItem(this.#tripEvents, updatedEvent);
+    this.#tripEventPresenter.get(updatedEvent.id).init(updatedEvent);
+  };
 
-    const removeTask = () => {
-      taskEditFormComponent.removeAllListeners();
-      remove(taskEditFormComponent);
-      taskComponent.removeEditClickListener();
-      remove(taskComponent);
-      const taskIndex = this.#tripTasks.indexOf(task);
-      this.#tripTasks.splice(taskIndex, 1);
-      if (!this.#tripTasks.length) {
-        this.#renderEmptyList();
-      }
-    };
-
-    const replaceFormToTask = () => {
-      taskEditFormComponent.removeAllListeners();
-      taskComponent.setEditClickListener(replaceTaskToForm);
-      replace(taskComponent, taskEditFormComponent);
-      remove(taskEditFormComponent);
-    };
-
-    const replaceTaskToForm = () => {
-      if (!this.#tripEventsList.isNewFormOrEditorOpen()){
-        taskEditFormComponent = new EventEditFormView(task);
-        taskEditFormComponent.setFormSubmitListener(replaceFormToTask);
-        taskEditFormComponent.setCloseButtonClickListener(replaceFormToTask);
-        taskEditFormComponent.setDeleteButtonClickListener(removeTask);
-        taskEditFormComponent.setEscKeydownListener(replaceFormToTask);
-        replace(taskEditFormComponent, taskComponent);
-      }
-    };
-
-    taskComponent.setEditClickListener(replaceTaskToForm);
-
-    render(taskComponent, this.#tripEventsList.element);
+  #handleModeChange = () => {
+    this.#tripEventPresenter.forEach((presenter) => presenter.resetView());
   };
 }
 
