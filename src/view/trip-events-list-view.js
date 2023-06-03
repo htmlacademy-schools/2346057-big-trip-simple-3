@@ -8,8 +8,6 @@ class TripEventsListView extends AbstractView {
   get template() {
     return createTripEventsListTemplate();
   }
-
-  isNewFormOrEditorOpen = () => this.element.querySelector('.event--edit');
 }
 
 export default TripEventsListView;

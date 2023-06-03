@@ -178,12 +178,12 @@ class EventEditFormView extends AbstractView {
 
   setFormSubmitListener = (callback) => {
     this._callback.saveForm = callback;
-    this.element.querySelector('form').addEventListener('submit', this.#formSaveHandler);
+    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
   };
 
-  #formSaveHandler = (evt) => {
+  #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this._callback.saveForm();
+    this._callback.saveForm(this.#info);
   };
 
   setDeleteButtonClickListener = (callback) => {
@@ -210,25 +210,6 @@ class EventEditFormView extends AbstractView {
     document.removeEventListener('keydown', this.#escKeydownHandler);
   };
 
-  removeDeleteButtonClickListener = () => {
-    this.element.querySelector('.event__reset-btn').removeEventListener('click', this.#deleteButtonClickHandler);
-  };
-
-  removeFormSubmitListener = () => {
-    this.element.querySelector('form').removeEventListener('submit', this.#formSaveHandler);
-  };
-
-  removeCloseButtonClickListener = () => {
-    this.element.querySelector('.event__rollup-btn').removeEventListener('click', this.#closeButtonClickHandler);
-  };
-
-  removeAllListeners = () => {
-    this.removeEscKeydownListener();
-    this.removeDeleteButtonClickListener();
-    this.removeFormSubmitListener();
-    this.removeCloseButtonClickListener();
-    this._callback = {};
-  };
 }
 
 export default EventEditFormView;

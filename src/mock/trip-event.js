@@ -1,6 +1,7 @@
 import { getRandomArrayElement, getRandomInt } from '../utils.js';
 import { TRIP_EVENT_TYPES } from '../const.js';
 import dayjs from 'dayjs';
+import { nanoid } from 'nanoid';
 
 const generateRandomEventType = () => getRandomArrayElement(TRIP_EVENT_TYPES);
 
@@ -108,7 +109,7 @@ const generateTripEvents = (eventsNumber) => {
     const { dateFrom, dateTo } = generateRandomDates(currentDate);
     const type = generateRandomEventType();
     events[i] = {
-      id: i + 1,
+      id: nanoid(),
       type,
       dateFrom,
       dateTo,
