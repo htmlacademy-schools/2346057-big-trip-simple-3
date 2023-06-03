@@ -67,7 +67,7 @@ class TripPresenter {
         replace(taskEditFormComponent, taskComponent);
       }
     };
-    
+
     taskComponent.setEditClickListener(replaceTaskToForm);
 
     render(taskComponent, this.#tripEventsList.element);

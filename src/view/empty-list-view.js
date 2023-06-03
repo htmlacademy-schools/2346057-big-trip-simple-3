@@ -1,8 +1,8 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
 const createEmptyListTemplate = () => {
-    const filter = document.querySelector('input[name="trip-filter"]:checked').value;
-    if (filter === 'everything') {
+  const filter = document.querySelector('input[name="trip-filter"]:checked').value;
+  if (filter === 'everything') {
     return `
     <p class="trip-events__msg">Click New Event to create your first point</p>
     `;

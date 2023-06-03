@@ -4,7 +4,7 @@ const createTripEventsListTemplate = () => `
   <ul class="trip-events__list"></ul>
 `;
 
-class TripEventsListView extends AbstractView  {
+class TripEventsListView extends AbstractView {
   get template() {
     return createTripEventsListTemplate();
   }
