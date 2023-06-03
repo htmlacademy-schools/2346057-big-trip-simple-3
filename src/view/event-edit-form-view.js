@@ -1,6 +1,7 @@
 import { getFullDataTime } from '../utils.js';
 import { OFFERS_BY_TYPE, DESTINATION_NAMES } from '../mock/trip-event.js';
 import AbstractView from '../framework/view/abstract-view.js';
+import { DESTINATIONS } from '../mock/trip-event.js';
 
 const createDestinationTemplate = (destination) => {
   const {description, pictures} = destination;
@@ -135,9 +136,9 @@ const createEventEditorTemplate = (tripInfo) => {
         <div class="event__field-group  event__field-group--price">
           <label class="event__label" for="event-price-1">
             <span class="visually-hidden">Price</span>
-            &euro; ${basePrice}
+            &euro;
           </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
+          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
         </div>
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
         <button class="event__reset-btn" type="reset">Delete</button>
@@ -183,7 +184,7 @@ class EventEditFormView extends AbstractView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this._callback.saveForm(this.#info);
+    this._callback.saveForm();
   };
 
   setDeleteButtonClickListener = (callback) => {
@@ -202,8 +203,10 @@ class EventEditFormView extends AbstractView {
   };
 
   #escKeydownHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.escClose();
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      this._callback.escClose();
+    }
   };
 
   removeEscKeydownListener = () => {

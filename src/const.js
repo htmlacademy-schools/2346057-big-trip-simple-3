@@ -1,4 +1,4 @@
-export const TRIP_EVENT_TYPES = [
+const TRIP_EVENT_TYPES = [
   'taxi',
   'bus',
   'train',
@@ -9,3 +9,10 @@ export const TRIP_EVENT_TYPES = [
   'sightseeing',
   'restaurant',
 ];
+
+const SORT_TYPE = {
+  DAY: 'day',
+  PRICE: 'price',
+};
+
+export { TRIP_EVENT_TYPES, SORT_TYPE };

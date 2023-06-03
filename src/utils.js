@@ -46,4 +46,29 @@ const updateItem = (items, update) => {
   ];
 };
 
-export { updateItem, getRandomInt, getRandomArrayElement, getDate, getTime, getFullDataTime, createOnEscKeydownFunction };
+const getWeightForNullDate = (dateA, dateB) => {
+  if (dateA === null && dateB === null) {
+    return 0;
+  }
+
+  if (dateA === null) {
+    return 1;
+  }
+
+  if (dateB === null) {
+    return -1;
+  }
+
+  return null;
+};
+
+const sortDays = (taskA, taskB) => {
+  const weight = getWeightForNullDate(taskA.dateTo, taskB.dateTo);
+
+  return weight ?? dayjs(taskA.dateTo).diff(dayjs(taskB.dateTo));
+};
+
+const sortPrices = (taskA, taskB) => taskB.basePrice - taskA.basePrice;
+
+export { sortDays, sortPrices, updateItem, getRandomInt, getRandomArrayElement, getDate, getTime, getFullDataTime, createOnEscKeydownFunction };
+
