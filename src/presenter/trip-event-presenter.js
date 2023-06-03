@@ -72,9 +72,9 @@ export default class TripEventPresenter {
     replace(this.#eventEditorComponent, this.#eventComponent);
   };
 
-  #handleFormSubmit = (task) => {
-    this.#changeData(task);
+  #handleFormSubmit = (tripEvent) => {
     this.#replaceFormToEvent();
+    this.#changeData(tripEvent);
   };
 
   destroy = () => {
@@ -87,7 +87,7 @@ export default class TripEventPresenter {
       this.#replaceFormToEvent();
     }
   };
-
+  
   #removeElement = () => {
     this.#eventEditorComponent.removeEscKeydownListener();
     this.destroy();
