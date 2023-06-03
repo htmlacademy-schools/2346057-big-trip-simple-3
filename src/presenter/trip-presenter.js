@@ -3,10 +3,12 @@ import TripEventsListView from '../view/trip-events-list.js';
 import EventEditorView from '../view/event-editor-view.js';
 import TripEventView from '../view/trip-event-view.js';
 import EventListSortingView from '../view/event-list-sorting-view.js';
+import EmptyListView from '../view/empty-list-view.js';
 import { createOnEscKeydownFunction } from '../utils.js';
 
 class TripPresenter {
   #tripEventsList = new TripEventsListView();
+  #eventSorter = new EventListSortingView();
   #container;
   #tripEventsModel;
   #tripTasks;
@@ -16,13 +18,22 @@ class TripPresenter {
     this.#tripEventsModel = tripEventsModel;
     this.#tripTasks = [...this.#tripEventsModel.tripEvents];
 
-    render(new EventListSortingView(), this.#container);
+    render(this.#eventSorter, this.#container);
     render(this.#tripEventsList, this.#container);
 
-    for (let i = 0; i < this.#tripTasks.length; i++) {
-      this.#renderTask(this.#tripTasks[i]);
+    if (this.#tripTasks.length){
+      for (let i = 0; i < this.#tripTasks.length; i++) {
+        this.#renderTask(this.#tripTasks[i]);
+      }
+    } else {
+      this.#renderEmptyList();
     }
   }
+
+  #renderEmptyList = () => {
+    const emptyListComponent = new EmptyListView('Everything');
+    render(emptyListComponent, this.#container);
+  };
 
   #renderTask = (task) => {
     const taskComponent = new TripEventView(task);
