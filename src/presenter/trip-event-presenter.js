@@ -1,7 +1,8 @@
 import { render, replace, remove } from '../framework/render.js';
 import EventEditFormView from '../view/event-edit-form-view.js';
 import TripEventView from '../view/trip-event-view.js';
-import EmptyListView from '../view/empty-list-view.js';
+import { USER_ACTION, UPDATE_TYPE } from '../const.js';
+import { isDatesEqual } from '../utils.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -37,13 +38,13 @@ export default class TripEventPresenter {
     this.#eventComponent.setEditClickListener(this.#replaceEventToForm);
 
 
-    this.#eventEditorComponent.setFormSubmitListener(this.#replaceFormToEvent);
+    this.#eventEditorComponent.setFormSubmitListener(this.#handleFormSubmit);
     this.#eventEditorComponent.setCloseButtonClickListener(this.#replaceFormToEvent);
-    this.#eventEditorComponent.setDeleteButtonClickListener(this.#removeElement);
+    this.#eventEditorComponent.setDeleteButtonClickListener(this.#handleDeleteClick);
 
     if (prevEventComponent === null || prevEventEditorComponent === null) {
       render(this.#eventComponent, this.#container.element);
-      return 0;
+      return;
     }
 
     if (this.#mode === Mode.DEFAULT) {
@@ -60,9 +61,9 @@ export default class TripEventPresenter {
 
   #replaceFormToEvent = () => {
     this.#eventEditorComponent.reset(this.#event);
+    replace(this.#eventComponent, this.#eventEditorComponent);
     this.#eventEditorComponent.removeEscKeydownListener();
     this.#mode = Mode.DEFAULT;
-    replace(this.#eventComponent, this.#eventEditorComponent);
   };
 
   #replaceEventToForm = () => {
@@ -73,9 +74,18 @@ export default class TripEventPresenter {
     replace(this.#eventEditorComponent, this.#eventComponent);
   };
 
-  #handleFormSubmit = (tripEvent) => {
+  #handleFormSubmit = (update) => {
+    const isMinorUpdate =
+      !isDatesEqual(this.#event.dateTo, update.dateTo) ||
+      this.#event.basePrice !== update.basePrice;
+
+    this.#changeData(
+      USER_ACTION.UPDATE_TASK,
+      isMinorUpdate ? UPDATE_TYPE.MINOR : UPDATE_TYPE.PATCH,
+      update,
+    );
+
     this.#replaceFormToEvent();
-    this.#changeData(tripEvent);
   };
 
   destroy = () => {
@@ -90,12 +100,12 @@ export default class TripEventPresenter {
     }
   };
   
-  #removeElement = () => {
+  #handleDeleteClick = (event) => {
     this.#eventEditorComponent.removeEscKeydownListener();
-    this.destroy();
-    if (this.#container.element.childElementCount === 0) {
-      const epmtyList = new EmptyListView('Everything');
-      render(epmtyList, this.#container.element);
-    }
+    this.#changeData(
+      USER_ACTION.DELETE_TASK,
+      UPDATE_TYPE.MINOR,
+      event,
+    );
   };
 }

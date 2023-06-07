@@ -6,7 +6,7 @@ const createOffersTemplate = (type, offers) => {
   let template = '';
   const allOffers = OFFERS_BY_TYPE[`${type}`].offers;
   Object.values(allOffers).forEach(({id, title, price}) => {
-    if (offers.includes(id)) {
+    if (offers.includes(id) || offers.includes(String(id))) {
       template += `
       <li class="event__offer">
       <span class="event__offer-title">${title}</span>
