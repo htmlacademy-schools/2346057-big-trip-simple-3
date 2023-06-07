@@ -67,7 +67,6 @@ const createOffersTemplate = (type, offers, availableOffers) => {
 
 const createTypeImageTemplate = (currentType, availableOffers) => {
   let template = '';
-  const allTypes = Object.keys(OFFERS_BY_TYPE);
   Object.values(availableOffers).forEach(({type}) => {
     const checkedValue = (type === currentType) ? 'checked' : '';
     template += `

@@ -3,8 +3,8 @@ import {nanoid} from 'nanoid';
 import {USER_ACTION, UPDATE_TYPE} from '../const.js';
 import PointEditFormView from '../view/point-edit-form-view.js';
 
-export default class NewPointPresenter  {
-  #pointListContainer  = null;
+export default class NewPointPresenter {
+  #pointListContainer = null;
   #changeData = null;
   #newPointForm = null;
   #destroyCallback = null;
@@ -21,11 +21,11 @@ export default class NewPointPresenter  {
     this.#availableOffers = offers;
     this.#destroyCallback = callback;
 
-    if (this.#newPointForm  !== null) {
+    if (this.#newPointForm !== null) {
       return;
     }
 
-    this.#newPointForm  = PointEditFormView(this.#availableDestinations, this.#availableOffers);
+    this.#newPointForm = PointEditFormView(this.#availableDestinations, this.#availableOffers);
     this.#newPointForm .setFormSubmitListener(this.#handleFormSubmit);
     this.#newPointForm .setDeleteButtonClickListener(this.#handleDeleteClick);
 
@@ -35,14 +35,14 @@ export default class NewPointPresenter  {
   };
 
   destroy = () => {
-    if (this.#newPointForm  === null) {
+    if (this.#newPointForm === null) {
       return;
     }
 
     this.#destroyCallback?.();
 
     remove(this.#newPointForm );
-    this.#newPointForm  = null;
+    this.#newPointForm = null;
 
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
