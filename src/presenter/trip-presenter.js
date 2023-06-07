@@ -169,7 +169,6 @@ export default class TripPresenter {
       return;
     }
     this.#renderSort();
-    render(this.#tripEventsList, this.#container);
     this.#renderPoints();
   };
 }
