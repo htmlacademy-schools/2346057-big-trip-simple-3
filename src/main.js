@@ -1,9 +1,9 @@
+import { render } from './framework/render.js';
 import TripPresenter from './presenter/trip-presenter.js';
 import TripPointsModel from './model/trip-points-model.js';
 import FilterModel from './model/filter-model.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 import NewPointButtonView from './view/new-point-button-view.js';
-import { render } from './framework/render.js';
 import PointsApiService from './points-api-service.js';
 
 const AUTHORIZATION = 'Basic hS2sfS44wcl1';

@@ -1,8 +1,8 @@
 import { render, replace, remove } from '../framework/render.js';
+import { UserAction, UpdateType } from '../const.js';
+import { isDatesEqual } from '../utils.js';
 import PointEditFormView from '../view/point-edit-form-view.js';
 import TripPointView from '../view/trip-point-view.js';
-import { USER_ACTION, UPDATE_TYPE } from '../const.js';
-import { isDatesEqual } from '../utils.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -118,8 +118,8 @@ export default class TripPointPresenter {
       this.#point.basePrice !== update.basePrice;
 
     this.#changeData(
-      USER_ACTION.UPDATE_TASK,
-      isMinorUpdate ? UPDATE_TYPE.MINOR : UPDATE_TYPE.PATCH,
+      UserAction.UPDATE_POINT,
+      isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
       update,
     );
   };
@@ -139,8 +139,8 @@ export default class TripPointPresenter {
   #handleDeleteClick = (point) => {
     this.#pointEditorComponent.removeEscKeydownListener();
     this.#changeData(
-      USER_ACTION.DELETE_TASK,
-      UPDATE_TYPE.MINOR,
+      UserAction.DELETE_POINT,
+      UpdateType.MINOR,
       point,
     );
   };

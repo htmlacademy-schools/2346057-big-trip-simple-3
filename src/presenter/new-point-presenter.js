@@ -1,5 +1,5 @@
-import {remove, render, RenderPosition} from '../framework/render.js';
-import {USER_ACTION, UPDATE_TYPE} from '../const.js';
+import { remove, render, RenderPosition } from '../framework/render.js';
+import { UserAction, UpdateType } from '../const.js';
 import PointEditFormView from '../view/point-edit-form-view.js';
 
 export default class NewPointPresenter {
@@ -65,8 +65,8 @@ export default class NewPointPresenter {
 
   #handleFormSubmit = (point) => {
     this.#changeData(
-      USER_ACTION.ADD_TASK,
-      UPDATE_TYPE.MINOR,
+      UserAction.ADD_POINT,
+      UpdateType.MINOR,
       point,
     );
   };

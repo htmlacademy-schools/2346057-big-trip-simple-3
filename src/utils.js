@@ -1,5 +1,5 @@
+import { FilterType } from './const';
 import dayjs from 'dayjs';
-import { FILTER_TYPE } from './const';
 
 const getDate = (date) => dayjs(date).format('MMM D');
 const getTime = (date) => dayjs(date).format('HH-mm');
@@ -23,13 +23,13 @@ const getWeightForNullDate = (dateA, dateB) => {
 
 const isDatesEqual = (dateA, dateB) => (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'm');
 
-const sortDays = (taskA, taskB) => {
-  const weight = getWeightForNullDate(taskA.dateTo, taskB.dateTo);
+const sortDays = (pointA, pointB) => {
+  const weight = getWeightForNullDate(pointA.dateFrom, pointB.dateFrom);
 
-  return weight ?? dayjs(taskA.dateTo).diff(dayjs(taskB.dateTo));
+  return weight ?? dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom));
 };
 
-const sortPrices = (taskA, taskB) => taskB.basePrice - taskA.basePrice;
+const sortPrices = (pointA, pointB) => pointB.basePrice - pointA.basePrice;
 
 const isDateFuture = (date) => {
   const currentDate = dayjs();
@@ -38,8 +38,8 @@ const isDateFuture = (date) => {
 };
 
 const filter = {
-  [FILTER_TYPE.EVERYTHING]: (points) => points,
-  [FILTER_TYPE.FUTURE]: (points) => points.filter((point) => isDateFuture(point.dateTo)),
+  [FilterType.EVERYTHING]: (points) => points,
+  [FilterType.FUTURE]: (points) => points.filter((point) => isDateFuture(point.dateFrom)),
 };
 
 const isFormValid = (state, availableDestinations) => {
