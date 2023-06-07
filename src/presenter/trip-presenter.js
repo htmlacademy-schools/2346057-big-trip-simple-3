@@ -118,7 +118,7 @@ export default class TripPresenter {
         this.#tripPointPresenter.get(data.id).init(data);
         break;
       case UPDATE_TYPE.MINOR:
-        this.#clearEventList();
+        this.#clearPointList();
         this.#renderBoard();
         break;
       case UPDATE_TYPE.MAJOR:
