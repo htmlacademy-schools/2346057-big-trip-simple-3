@@ -81,15 +81,15 @@ export default class TripPointsModel extends Observable {
     }
 
     try {
-        await this.#pointsApiService.deletePoint(update);
-        this.#points = [
-          ...this.#points.slice(0, index),
-          ...this.#points.slice(index + 1),
-        ];
-        this._notify(updateType);
-      } catch(err) {
-        throw new Error('Can\'t delete task');
-      }
+      await this.#pointsApiService.deletePoint(update);
+      this.#points = [
+        ...this.#points.slice(0, index),
+        ...this.#points.slice(index + 1),
+      ];
+      this._notify(updateType);
+    } catch(err) {
+      throw new Error('Can\'t delete task');
+    }
   };
 
   #adaptToClient = (point) => {
