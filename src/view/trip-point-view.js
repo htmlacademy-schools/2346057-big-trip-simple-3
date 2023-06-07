@@ -9,14 +9,15 @@ const createOffersTemplate = (type, offers, availableOffers) => {
       typeOffers
         .filter(({ id }) => offers.includes(id))
         .map(({ title, price }) => `
-        <li class="event__offer">
-          <span class="event__offer-title">${title}</span>
-          &plus;&euro;&nbsp;
-          <span class="event__offer-price">${price}</span>
-        </li>
-      `).join('')
+          <li class="event__offer">
+            <span class="event__offer-title">${title}</span>
+            &plus;&euro;&nbsp;
+            <span class="event__offer-price">${price}</span>
+          </li>
+        `).join('')
     )
     .join('');
+
 
   return template;
 };
@@ -39,6 +40,7 @@ const createTripPointTemplate = (tripInfo, availableDestinations, availableOffer
   const destinationName = destination !== null
     ? availableDestinations[destination - 1].name
     : 'No destination';
+
   return `
   <li class="trip-events__item">
     <div class="event">
@@ -78,6 +80,7 @@ export default class TripPointView extends AbstractView {
     super();
     this.#availableDestinations = destinations;
     this.#availableOffers = offers;
+
     this.#point = point;
   }
 
@@ -94,5 +97,4 @@ export default class TripPointView extends AbstractView {
     evt.preventDefault();
     this._callback.openEditor();
   };
-
 }

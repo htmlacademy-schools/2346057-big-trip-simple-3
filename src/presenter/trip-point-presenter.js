@@ -43,8 +43,11 @@ export default class TripPointPresenter {
 
     this.#pointComponent.setEditClickListener(this.#replacePointToForm);
 
+    // нажатие на кнопку Save
     this.#pointEditorComponent.setFormSubmitListener(this.#handleFormSubmit);
+    // нажатие на стрелку, чтобы закрыть форму
     this.#pointEditorComponent.setCloseButtonClickListener(this.#replaceFormToPoint);
+    // нажатие на кнопку Delete
     this.#pointEditorComponent.setDeleteButtonClickListener(this.#handleDeleteClick);
 
     if (prevPointComponent === null || prevPointEditorComponent === null) {
@@ -115,6 +118,7 @@ export default class TripPointPresenter {
   #handleFormSubmit = (update) => {
     const isMinorUpdate =
       !isDatesEqual(this.#point.dateTo, update.dateTo) ||
+      !isDatesEqual(this.#point.dateFrom, update.dateFrom) ||
       this.#point.basePrice !== update.basePrice;
 
     this.#changeData(

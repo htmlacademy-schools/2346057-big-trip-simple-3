@@ -1,6 +1,7 @@
 import { getFullDataTime, isFormValid } from '../utils.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import flatpickr from 'flatpickr';
+
 import 'flatpickr/dist/flatpickr.min.css';
 
 const POINT_TEMPLATE = {
@@ -23,6 +24,7 @@ const createDestinationTemplate = (destination, availableDestinations) => {
     <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${description}</p>
+
         <div class="event__photos-container">
           <div class="event__photos-tape">
             ${picturesSection}
@@ -114,54 +116,59 @@ const createPointEditorTemplate = (data, isPointNew, availableDestinations, avai
       </button>`;
 
   return `
-  <li class="trip-events__item" ${isDisabled ? 'style="pointer-events: none;"' : ''}>
-    <form class="event event--edit" action="#" method="post">
-      <header class="event__header">
-        <div class="event__type-wrapper">
-          <label class="event__type  event__type-btn" for="event-type-toggle-1">
-            <span class="visually-hidden">Choose event type</span>
-            <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
-          </label>
-          <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
-          <div class="event__type-list">
-            <fieldset class="event__type-group">
-              <legend class="visually-hidden">Event type</legend>
-              ${createTypeImageTemplate(type, availableOffers)}
-            </fieldset>
+<li class="trip-events__item" ${isDisabled ? 'style="pointer-events: none;"' : ''}>
+  <form class="event event--edit" action="#" method="post">
+    <header class="event__header">
+      <div class="event__type-wrapper">
+        <label class="event__type  event__type-btn" for="event-type-toggle-1">
+          <span class="visually-hidden">Choose event type</span>
+          <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
+        </label>
+        <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+
+        <div class="event__type-list">
+          <fieldset class="event__type-group">
+            <legend class="visually-hidden">Event type</legend>
+            ${createTypeImageTemplate(type, availableOffers)}
+          </fieldset>
         </div>
       </div>
+
       <div class="event__field-group  event__field-group--destination">
         <label class="event__label  event__type-output" for="event-destination-1">
           ${type}
         </label>
         <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationName}" list="destination-list-1">
         <datalist id="destination-list-1">
-            ${createDestinationListTemplate(availableDestinations)}
-          </datalist>
-        </div>
-        <div class="event__field-group  event__field-group--time">
-          <label class="visually-hidden" for="event-start-time-1">From</label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${tripDateFrom}">
-          &mdash;
-          <label class="visually-hidden" for="event-end-time-1">To</label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${tripDateTo}">
-        </div>
-        <div class="event__field-group  event__field-group--price">
-          <label class="event__label" for="event-price-1">
-            <span class="visually-hidden">Price</span>
-            &euro;
-          </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}" pattern="[0-9]*">
-        </div>
-        ${buttonsTemplate}
-      </header>
-      <section class="event__details">
-        ${offersTemplate}
-        ${destinationTemplate}
-      </section>
-    </form>
-  </li>
-  `;
+          ${createDestinationListTemplate(availableDestinations)}
+        </datalist>
+      </div>
+
+      <div class="event__field-group  event__field-group--time">
+        <label class="visually-hidden" for="event-start-time-1">From</label>
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${tripDateFrom}">
+        &mdash;
+        <label class="visually-hidden" for="event-end-time-1">To</label>
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${tripDateTo}"">
+      </div>
+
+      <div class="event__field-group  event__field-group--price">
+        <label class="event__label" for="event-price-1">
+          <span class="visually-hidden">Price</span>
+          &euro;
+        </label>
+        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}" pattern="[0-9]*">
+      </div>
+
+      ${buttonsTemplate}
+    </header>
+    <section class="event__details">
+      ${offersTemplate}
+      ${destinationTemplate}
+    </section>
+  </form>
+</li>
+`;
 };
 
 export default class PointEditFormView extends AbstractStatefulView {
@@ -174,14 +181,18 @@ export default class PointEditFormView extends AbstractStatefulView {
 
   constructor(destinations, offers, point = POINT_TEMPLATE) {
     super();
+
     this.#availableDestinations = destinations;
     this.#availableOffers = offers;
 
     this.#isPointNew = (point === POINT_TEMPLATE);
     this._state = PointEditFormView.parsePointToState(point);
+
     this.#setInnerHandlers();
     this.#setDateToPicker();
     this.#setDateFromPicker();
+
+
   }
 
   static parsePointToState = (point) => ({...point,
@@ -192,14 +203,13 @@ export default class PointEditFormView extends AbstractStatefulView {
 
   static parseStateToPoint = (state) => {
     const point = {...state};
-
     if (!point.isDestination) {
       point.destination = null;
     }
-
     delete point.isDestination;
     delete point.isSaving;
     delete point.isDeleting;
+
     return point;
   };
 
@@ -223,6 +233,7 @@ export default class PointEditFormView extends AbstractStatefulView {
     this.setFormSubmitListener(this._callback.formSubmit);
     this.setCloseButtonClickListener(this._callback.closeForm);
     this.setDeleteButtonClickListener(this._callback.delete);
+
     this.#setDateToPicker();
     this.#setDateFromPicker();
   };
@@ -303,6 +314,7 @@ export default class PointEditFormView extends AbstractStatefulView {
     evt.preventDefault();
     const newDestinationName = evt.target.value;
     const destination = Object.values(this.#availableDestinations).find(({name}) => newDestinationName === name);
+
     if (destination) {
       this.updateElement({
         destination: destination.id,
@@ -314,6 +326,7 @@ export default class PointEditFormView extends AbstractStatefulView {
         isDestination: false,
       });
     }
+
   };
 
   setCloseButtonClickListener = (callback) => {
@@ -373,6 +386,7 @@ export default class PointEditFormView extends AbstractStatefulView {
 
   removeElement = () => {
     super.removeElement();
+    this.removeEscKeydownListener();
 
     if (this.#datepicker.dateTo) {
       this.#datepicker.dateTo.destroy();
@@ -382,5 +396,4 @@ export default class PointEditFormView extends AbstractStatefulView {
       this.#datepicker.dateFrom = null;
     }
   };
-
 }

@@ -15,6 +15,7 @@ const buttonSection = document.querySelector('.trip-main');
 
 const tripPointsModel = new TripPointsModel(new PointsApiService(END_POINT, AUTHORIZATION));
 const filterModel = new FilterModel();
+
 const tripPresenter = new TripPresenter(pointssSection, tripPointsModel, filterModel);
 tripPresenter.init();
 const filterPresenter = new FilterPresenter(filtersSection, filterModel, tripPointsModel);
@@ -22,6 +23,7 @@ const filterPresenter = new FilterPresenter(filtersSection, filterModel, tripPoi
 filterPresenter.init();
 
 const newPointButtonComponent = new NewPointButtonView();
+
 const handleNewPointFormClose = () => {
   newPointButtonComponent.element.disabled = false;
 };
@@ -32,6 +34,9 @@ const handleNewPointButtonClick = () => {
 };
 
 tripPointsModel.init()
+  .catch(() => {
+    newPointButtonComponent.element.disabled = true;
+  })
   .finally(() => {
     render(newPointButtonComponent, buttonSection);
     newPointButtonComponent.setClickListener(handleNewPointButtonClick);
