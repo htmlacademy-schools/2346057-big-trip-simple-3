@@ -99,7 +99,7 @@ export default class TripEventPresenter {
       this.#replaceFormToEvent();
     }
   };
-  
+
   #handleDeleteClick = (event) => {
     this.#eventEditorComponent.removeEscKeydownListener();
     this.#changeData(

@@ -47,5 +47,5 @@ export default class TripEventsModel extends Observable {
 
     this._notify(updateType);
   };
-  
+
 }
