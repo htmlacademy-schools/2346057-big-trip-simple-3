@@ -1,19 +1,5 @@
 import dayjs from 'dayjs';
-import { FILTER_TYPE, DESTINATION_NAMES } from './const';
-
-const getRandomInt = (min, max) => {
-  if (max < min) {
-    throw Error('Incorrect range');
-  }
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1) + min);
-};
-
-const getRandomArrayElement = (array) => {
-  const index = getRandomInt(0, array.length - 1);
-  return array[index];
-};
+import { FILTER_TYPE } from './const';
 
 const getDate = (date) => dayjs(date).format('MMM D');
 const getTime = (date) => dayjs(date).format('HH-mm');
@@ -52,16 +38,14 @@ const isDateFuture = (date) => {
 };
 
 const filter = {
-  [FILTER_TYPE.EVERYTHING]: (events) => events,
-  [FILTER_TYPE.FUTURE]: (events) => events.filter((event) => isDateFuture(event.dateTo)),
+  [FILTER_TYPE.EVERYTHING]: (points) => points,
+  [FILTER_TYPE.FUTURE]: (points) => points.filter((point) => isDateFuture(point.dateTo)),
 };
 
-const isFormValid = (state) => {
-  if (state.destination && state.basePrice) {
-    const isDestination = DESTINATION_NAMES.includes(state.destination.name);
-    return isDestination && /^\d+$/.test(state.basePrice);
-  }
-  return false;
+const isFormValid = (state, availableDestinations) => {
+  const allIds = Object.keys(availableDestinations);
+
+  return (allIds.includes(`${state.destination - 1}`) && /^\d+$/.test(state.basePrice));
 };
 
-export { isFormValid, filter, isDatesEqual, sortDays, sortPrices, getRandomInt, getRandomArrayElement, getDate, getTime, getFullDataTime };
+export { isFormValid, filter, isDatesEqual, sortDays, sortPrices, getDate, getTime, getFullDataTime };

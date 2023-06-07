@@ -1,7 +1,7 @@
 import { SORT_TYPE } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
-const createEventListSortingTemplate = (currentSortType) => `
+const createPointListSortingTemplate = (currentSortType) => `
 <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
       <div class="trip-sort__item  trip-sort__item--day">
       <input id="sort-day" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-day" data-sort-type="${SORT_TYPE.DAY}" ${currentSortType === SORT_TYPE.DAY ? 'checked' : ''}>
@@ -26,7 +26,7 @@ const createEventListSortingTemplate = (currentSortType) => `
     </form>
   `;
 
-class EventListSortingView extends AbstractView {
+export default class PointListSortingView extends AbstractView {
   #currentSortType = null;
   constructor(currentSortType) {
     super();
@@ -34,7 +34,7 @@ class EventListSortingView extends AbstractView {
   }
 
   get template() {
-    return createEventListSortingTemplate(this.#currentSortType);
+    return createPointListSortingTemplate(this.#currentSortType);
   }
 
   setSortTypeChangeHandler = (callback) => {
@@ -51,5 +51,3 @@ class EventListSortingView extends AbstractView {
     this._callback.sortTypeChange(evt.target.dataset.sortType);
   };
 }
-
-export default EventListSortingView;

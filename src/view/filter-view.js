@@ -1,7 +1,7 @@
 import { FILTER_TYPE } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
-const createEventFiltersTemplate = (currentFilter) => `
+const createPointFiltersTemplate = (currentFilter) => `
   <form class="trip-filters" action="#" method="get">
     <div class="trip-filters__filter">
     <input id="filter-everything" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="everything" ${currentFilter === FILTER_TYPE.EVERYTHING ? 'checked' : ''}>
@@ -15,7 +15,7 @@ const createEventFiltersTemplate = (currentFilter) => `
   </form>
 `;
 
-class FilterView extends AbstractView {
+export default class FilterView extends AbstractView {
   #currentFilter = null;
 
   constructor(currentFilterType) {
@@ -24,7 +24,7 @@ class FilterView extends AbstractView {
   }
 
   get template() {
-    return createEventFiltersTemplate(this.#currentFilter);
+    return createPointFiltersTemplate(this.#currentFilter);
   }
 
   get selectedFilter() {
@@ -41,5 +41,3 @@ class FilterView extends AbstractView {
     this._callback.chageFilter(evt.target.value);
   };
 }
-
-export default FilterView;
