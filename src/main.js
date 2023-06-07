@@ -23,9 +23,9 @@ const handleNewEventFormClose = () => {
 };
 
 const handleNewEventButtonClick = () => {
-    tripPresenter.createTask(handleNewEventFormClose);
-    newEventButtonComponent.element.disabled = true;
-  };
+  tripPresenter.createTask(handleNewEventFormClose);
+  newEventButtonComponent.element.disabled = true;
+};
 
 render(newEventButtonComponent, buttonSection);
- newEventButtonComponent.setClickListener(handleNewEventButtonClick);
+newEventButtonComponent.setClickListener(handleNewEventButtonClick);
