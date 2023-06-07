@@ -2,23 +2,22 @@ import { getDate, getTime } from '../utils.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
 const createOffersTemplate = (type, offers, availableOffers) => {
-  let template = '';
   const allOffers = Object.values(availableOffers);
-  allOffers.forEach(({type: pointType, offers: typeOffers}) => {
-    if (type === pointType) {
-      typeOffers.forEach(({id, title, price}) => {
-        if (offers.includes(id)) {
-          template += `
-            <li class="event__offer">
-              <span class="event__offer-title">${title}</span>
-              &plus;&euro;&nbsp;
-              <span class="event__offer-price">${price}</span>
-            </li>
-            `;
-        }
-      });
-    }
-  });
+  const template = allOffers
+  .filter(({ type: pointType }) => type === pointType)
+  .map(({ offers: typeOffers }) =>
+    typeOffers
+      .filter(({ id }) => offers.includes(id))
+      .map(({ title, price }) => `
+        <li class="event__offer">
+          <span class="event__offer-title">${title}</span>
+          &plus;&euro;&nbsp;
+          <span class="event__offer-price">${price}</span>
+        </li>
+      `).join('')
+  )
+  .join('');
+
   return template;
 };
 
