@@ -30,6 +30,7 @@ class TripPresenter {
     this.#tripEventsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
   }
+
   init() {
     this.#renderBoard();
   }

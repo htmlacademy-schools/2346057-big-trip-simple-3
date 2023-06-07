@@ -22,6 +22,7 @@ class FilterView extends AbstractView {
     super();
     this.#currentFilter = currentFilterType;
   }
+
   get template() {
     return createEventFiltersTemplate(this.#currentFilter);
   }

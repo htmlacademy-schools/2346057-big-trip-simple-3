@@ -32,6 +32,7 @@ class EventListSortingView extends AbstractView {
     super();
     this.#currentSortType = currentSortType;
   }
+
   get template() {
     return createEventListSortingTemplate(this.#currentSortType);
   }

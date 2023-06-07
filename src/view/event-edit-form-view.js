@@ -192,6 +192,7 @@ class EventEditFormView extends AbstractStatefulView {
     this.#setDateToPicker();
     this.#setDateFromPicker();
   }
+
   static parseEventToState = (event) => ({...event,
     isDestination: event.destination !== null
   });
@@ -316,6 +317,12 @@ class EventEditFormView extends AbstractStatefulView {
         });
       }
     });
+    if (!isNewDestination) {
+      this._setState({
+        destination: null,
+        isDestination: false,
+      });
+    }
   };
 
   setCloseButtonClickListener = (callback) => {
