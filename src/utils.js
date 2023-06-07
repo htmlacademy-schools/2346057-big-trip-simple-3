@@ -39,7 +39,7 @@ const isDateFuture = (date) => {
 
 const filter = {
   [FilterType.EVERYTHING]: (points) => points,
-  [FilterType.FUTURE]: (points) => points.filter((point) => isDateFuture(point.dateFrom)),
+  [FilterType.FUTURE]: (points) => points.filter((point) => isDateFuture(point.dateTo)),
 };
 
 const isFormValid = (state, availableDestinations) => {

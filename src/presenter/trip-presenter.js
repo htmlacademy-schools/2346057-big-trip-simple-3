@@ -13,7 +13,6 @@ const TimeLimit = {
   LOWER_LIMIT: 350,
   UPPER_LIMIT: 1000,
 };
-
 export default class TripPresenter {
   #tripPointsList = new TripPointsListView();
   #emptyListComponent = null;
@@ -32,8 +31,8 @@ export default class TripPresenter {
 
   #filterType = FilterType.EVERYTHING;
   #sortType = SortType.DAY;
-  constructor (container, tripPointsModel, filterModel) {
 
+  constructor (container, tripPointsModel, filterModel) {
     this.#container = container;
     this.#tripPointsModel = tripPointsModel;
     this.#filterModel = filterModel;
@@ -69,9 +68,8 @@ export default class TripPresenter {
     this.#newPointPresenter.init(callback, this.#tripPointsModel.destinations, this.#tripPointsModel.offers);
   };
 
-
-  #renderEmptyList = () => {
-    this.#emptyListComponent = new EmptyListView(this.#filterType);
+  #renderEmptyList = (isError = false) => {
+    this.#emptyListComponent = new EmptyListView(this.#filterType, isError);
     render(this.#emptyListComponent, this.#container);
   };
 
@@ -114,7 +112,7 @@ export default class TripPresenter {
       case UserAction.UPDATE_POINT:
         this.#tripPointPresenter.get(update.id).setSaving();
         try {
-          this.#tripPointsModel.updatePoint(updateType, update);
+          await this.#tripPointsModel.updatePoint(updateType, update);
         } catch(err) {
           this.#tripPointPresenter.get(update.id).setAborting();
         }
@@ -122,7 +120,7 @@ export default class TripPresenter {
       case UserAction.ADD_POINT:
         this.#newPointPresenter.setSaving();
         try {
-          this.#tripPointsModel.addPoint(updateType, update);
+          await this.#tripPointsModel.addPoint(updateType, update);
         } catch(err) {
           this.#newPointPresenter.setAborting();
         }
@@ -130,7 +128,7 @@ export default class TripPresenter {
       case UserAction.DELETE_POINT:
         this.#tripPointPresenter.get(update.id).setDeleting();
         try {
-          this.#tripPointsModel.deletePoint(updateType, update);
+          await this.#tripPointsModel.deletePoint(updateType, update);
         } catch(err) {
           this.#tripPointPresenter.get(update.id).setAborting();
         }
@@ -157,6 +155,11 @@ export default class TripPresenter {
         remove(this.#loadingComponent);
         this.#renderBoard();
         break;
+      case UpdateType.ERROR:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderEmptyList(true);
+        break;
     }
   };
 
@@ -168,6 +171,7 @@ export default class TripPresenter {
   #renderSort = () => {
     this.#pointSorter = new PointListSortingView(this.#sortType);
     this.#pointSorter.setSortTypeChangeHandler(this.#handleSortTypeChange);
+
     render(this.#pointSorter, this.#container, RenderPosition.AFTERBEGIN);
   };
 
@@ -196,6 +200,7 @@ export default class TripPresenter {
       return;
     }
     this.#renderSort();
+
     this.#renderPoints();
   };
 }

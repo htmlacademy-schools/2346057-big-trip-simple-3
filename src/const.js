@@ -14,11 +14,13 @@ const UpdateType = {
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
   INIT: 'INIT',
+  ERROR: 'ERROR'
 };
 
 const FilterType = {
   EVERYTHING: 'everything',
   FUTURE: 'future',
 };
+
 
 export { FilterType, SortType, UserAction, UpdateType };

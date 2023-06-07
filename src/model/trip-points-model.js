@@ -19,14 +19,16 @@ export default class TripPointsModel extends Observable {
       this.#offers = await this.#pointsApiService.offers;
 
       this.#points = points.map(this.#adaptToClient);
+      this._notify(UpdateType.INIT);
 
     } catch(err) {
       this.#points = [];
       this.#destinations = null;
       this.#offers = null;
-    }
+      this._notify(UpdateType.ERROR);
 
-    this._notify(UpdateType.INIT);
+      throw new Error(err);
+    }
   }
 
   get points () {
