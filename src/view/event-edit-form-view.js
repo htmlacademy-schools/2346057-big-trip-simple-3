@@ -1,7 +1,6 @@
 import { getFullDataTime } from '../utils.js';
-import { OFFERS_BY_TYPE, DESTINATION_NAMES } from '../mock/trip-event.js';
-import AbstractView from '../framework/view/abstract-view.js';
-import { DESTINATIONS } from '../mock/trip-event.js';
+import { OFFERS_BY_TYPE, DESTINATION_NAMES, DESTINATIONS } from '../mock/trip-event.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 
 const createDestinationTemplate = (destination) => {
   const {description, pictures} = destination;
@@ -85,8 +84,8 @@ const createDestinationListTemplate = () => {
   return template;
 };
 
-const createEventEditorTemplate = (tripInfo) => {
-  const {dateFrom, dateTo, offers, type, destination, basePrice} = tripInfo;
+const createEventEditorTemplate = (data) => {
+  const {dateFrom, dateTo, offers, type, destination, basePrice, isDestination} = data;
 
   const tripDateFrom = dateFrom !== null
     ? getFullDataTime(dateFrom)
@@ -96,9 +95,15 @@ const createEventEditorTemplate = (tripInfo) => {
     ? getFullDataTime(dateTo)
     : 'No data';
 
-  const destinationName = destination !== null
+  const destinationName = isDestination
     ? destination.name
-    : 'No destination';
+    : '';
+
+  const destinationTemplate = isDestination
+    ? createDestinationTemplate(destination)
+    : '';
+
+  const offersTemplate = createOffersTemplate(type, offers);
 
   return `
   <li class="trip-events__item">
@@ -147,25 +152,132 @@ const createEventEditorTemplate = (tripInfo) => {
         </button>
       </header>
       <section class="event__details">
-        ${createOffersTemplate(type, offers)}
-        ${createDestinationTemplate(destination)}
+        ${offersTemplate}
+        ${destinationTemplate}
       </section>
     </form>
   </li>
   `;
 };
 
-class EventEditFormView extends AbstractView {
-  #info = null;
+class EventEditFormView extends AbstractStatefulView {
+  _state = null;
 
-  constructor(info) {
+  constructor(event) {
     super();
-    this.#info = info;
+    this._state = EventEditFormView.parseEventToState(event);
+    this.#setInnerHandlers();
   }
+  static parseEventToState = (event) => ({...event,
+    isDestination: event.destination !== null
+  });
+
+  static parseStateToEvent = (state) => {
+    const event = {...state};
+
+    if (!event.isDestination) {
+      event.destination = null;
+    }
+
+    delete event.isDestination;
+    return event;
+  };
 
   get template() {
-    return createEventEditorTemplate(this.#info);
+    return createEventEditorTemplate(this._state);
   }
+
+  #setInnerHandlers = () => {
+    this.element.querySelector('.event__type-list')
+      .addEventListener('change', this.#changeType);
+    this.element.querySelector('.event__input--destination')
+      .addEventListener('input', this.#changeDestination);
+    this.element.querySelector('.event__input--price')
+      .addEventListener('input', this.#changePrice);
+    this.element.querySelector('.event__available-offers')
+      .addEventListener('input', this.#changeOffers);
+    this.element.querySelector('#event-start-time-1')
+      .addEventListener('input', this.#changeDateFrom);
+    this.element.querySelector('#event-end-time-1')
+      .addEventListener('input', this.#changeDateTo);
+  };
+
+  _restoreHandlers = () => {
+    this.#setInnerHandlers();
+    this.setFormSubmitListener(this._callback.formSubmit);
+    this.setCloseButtonClickListener(this._callback.closeForm);
+    this.setDeleteButtonClickListener(this._callback.delete);
+  };
+
+  #changeDateTo = (evt) => {
+    evt.preventDefault();
+    const newDate = event.target.value;
+    this._setState({
+      dateTo: newDate,
+    });
+  };
+
+  #changeDateFrom = (evt) => {
+    evt.preventDefault();
+    const newDate = event.target.value;
+    this._setState({
+      dateFrom: newDate,
+    });
+  };
+
+  #changeType = (evt) => {
+    evt.preventDefault();
+    const fieldset = this.element.querySelector('.event__type-list');
+    const newType = fieldset.querySelector('input:checked').value;
+    this.updateElement({
+      type: newType,
+      offers: new Array(),
+    });
+  };
+
+  #changePrice = (evt) => {
+    evt.preventDefault();
+    const newPrice = event.target.value;
+    this._setState({
+      basePrice: newPrice,
+    });
+  };
+
+  #changeOffers = (evt) => {
+    evt.preventDefault();
+    const offersField = this.element.querySelector('.event__available-offers');
+    const checkboxes = offersField.querySelectorAll('.event__offer-checkbox:checked');
+
+    const checkedIds = new Array();
+
+    checkboxes.forEach((checkbox) => {
+      checkedIds.push(checkbox.id);
+    });
+
+    this._setState({
+      offers: checkedIds,
+    });
+  };
+
+  #changeDestination = (evt) => {
+    evt.preventDefault();
+    const newDestinationName = event.target.value;
+    let newDestination = null;
+    Object.values(DESTINATIONS).forEach((destination) => {
+      if (newDestinationName === destination.name) {
+        newDestination = destination;
+        this.updateElement({
+          destination: newDestination,
+          isDestination: true,
+        });
+      }
+    });
+
+    this._setState({
+      destination: {name: newDestinationName},
+      isDestination: false,
+    });
+  };
 
   setCloseButtonClickListener = (callback) => {
     this._callback.closeForm = callback;
@@ -178,13 +290,13 @@ class EventEditFormView extends AbstractView {
   };
 
   setFormSubmitListener = (callback) => {
-    this._callback.saveForm = callback;
+    this._callback.formSubmit = callback;
     this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
   };
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this._callback.saveForm();
+    this._callback.formSubmit(EventEditFormView.parseStateToEvent(this._state));;
   };
 
   setDeleteButtonClickListener = (callback) => {
@@ -212,7 +324,12 @@ class EventEditFormView extends AbstractView {
   removeEscKeydownListener = () => {
     document.removeEventListener('keydown', this.#escKeydownHandler);
   };
-
+  
+  reset = (event) => {
+    this.updateElement(
+      EventEditFormView.parseEventToState(event),
+    );
+  };
 }
 
 export default EventEditFormView;

@@ -70,7 +70,7 @@ DESTINATION_NAMES.forEach((name, index) => {
 
 const generateOffers = () => {
   const offers = {};
-  const offersNumber = getRandomInt(2, 5);
+  const offersNumber = getRandomInt(0, 5);
   for (let id = 1; id <= offersNumber; ++id) {
     offers[`${id}`] = {
       id,
