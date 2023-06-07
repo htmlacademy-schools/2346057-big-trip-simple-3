@@ -115,7 +115,7 @@ export default class TripPresenter {
   #handleModelEvent = (updateType, data) => {
     switch (updateType) {
       case UPDATE_TYPE.PATCH:
-        this.#tripEventPresenter.get(data.id).init(data);
+        this.#tripPointPresenter.get(data.id).init(data);
         break;
       case UPDATE_TYPE.MINOR:
         this.#clearEventList();
