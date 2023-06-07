@@ -5,8 +5,14 @@ import EmptyListView from '../view/empty-list-view.js';
 import TripPointPresenter from './trip-point-presenter.js';
 import NewPointPresenter from './new-point-presenter.js';
 import LoadingView from '../view/loading-view.js';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 import { filter, sortDays, sortPrices } from '../utils.js';
 import { SORT_TYPE, UPDATE_TYPE, USER_ACTION, FILTER_TYPE } from '../const.js';
+
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
+};
 
 export default class TripPresenter {
   #tripPointsList = new TripPointsListView();
@@ -19,6 +25,10 @@ export default class TripPresenter {
   #newPointPresenter = null;
   #tripPointsModel = null;
   #filterModel = null;
+  #uiBlocker = new UiBlocker({
+    lowerLimit: TimeLimit.LOWER_LIMIT,
+    upperLimit: TimeLimit.UPPER_LIMIT
+  });
 
   #filterType = FILTER_TYPE.EVERYTHING;
   #sortType = SORT_TYPE.DAY;
@@ -41,19 +51,19 @@ export default class TripPresenter {
   get points() {
     this.#filterType = this.#filterModel.filter;
     const points = this.#tripPointsModel.points;
-    const filteredTasks = filter[this.#filterType](points);
+    const filteredPoints = filter[this.#filterType](points);
 
     switch (this.#sortType) {
       case SORT_TYPE.DAY:
-        return filteredTasks.sort(sortDays);
+        return filteredPoints.sort(sortDays);
       case SORT_TYPE.PRICE:
-        return filteredTasks.sort(sortPrices);
+        return filteredPoints.sort(sortPrices);
     }
 
-    return filteredTasks;
+    return filteredPoints;
   }
 
-  createTask = (callback) => {
+  createPoint = (callback) => {
     this.#sortType = SORT_TYPE.DAY;
     this.#filterModel.setFilter(UPDATE_TYPE.MAJOR, FILTER_TYPE.EVERYTHING);
     this.#newPointPresenter.init(callback, this.#tripPointsModel.destinations, this.#tripPointsModel.offers);
@@ -74,7 +84,7 @@ export default class TripPresenter {
   };
 
   #renderPoints = () => {
-    this.points.forEach((task) => this.#renderPoint(task));
+    this.points.forEach((point) => this.#renderPoint(point));
   };
 
   #renderLoading = () => {
@@ -98,18 +108,35 @@ export default class TripPresenter {
     }
   };
 
-  #handleViewAction = (actionType, updateType, update) => {
+  #handleViewAction = async (actionType, updateType, update) => {
+    this.#uiBlocker.block();
     switch (actionType) {
       case USER_ACTION.UPDATE_TASK:
-        this.#tripPointsModel.updatePoint(updateType, update);
+        this.#tripPointPresenter.get(update.id).setSaving();
+        try {
+          this.#tripPointsModel.updatePoint(updateType, update);
+        } catch(err) {
+          this.#tripPointPresenter.get(update.id).setAborting();
+        }
         break;
       case USER_ACTION.ADD_TASK:
-        this.#tripPointsModel.addPoint(updateType, update);
+        this.#newPointPresenter.setSaving();
+        try {
+          this.#tripPointsModel.addPoint(updateType, update);
+        } catch(err) {
+          this.#newPointPresenter.setAborting();
+        }
         break;
       case USER_ACTION.DELETE_TASK:
-        this.#tripPointsModel.deletePoint(updateType, update);
+        this.#tripPointPresenter.get(update.id).setDeleting();
+        try {
+          this.#tripPointsModel.deletePoint(updateType, update);
+        } catch(err) {
+          this.#tripPointPresenter.get(update.id).setAborting();
+        }
         break;
     }
+    this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = (updateType, data) => {
