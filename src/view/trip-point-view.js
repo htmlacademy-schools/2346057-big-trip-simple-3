@@ -4,19 +4,19 @@ import AbstractView from '../framework/view/abstract-view.js';
 const createOffersTemplate = (type, offers, availableOffers) => {
   const allOffers = Object.values(availableOffers);
   const template = allOffers
-  .filter(({ type: pointType }) => type === pointType)
-  .map(({ offers: typeOffers }) =>
-    typeOffers
-      .filter(({ id }) => offers.includes(id))
-      .map(({ title, price }) => `
+    .filter(({ type: pointType }) => type === pointType)
+    .map(({ offers: typeOffers }) =>
+      typeOffers
+        .filter(({ id }) => offers.includes(id))
+        .map(({ title, price }) => `
         <li class="event__offer">
           <span class="event__offer-title">${title}</span>
           &plus;&euro;&nbsp;
           <span class="event__offer-price">${price}</span>
         </li>
       `).join('')
-  )
-  .join('');
+    )
+    .join('');
 
   return template;
 };

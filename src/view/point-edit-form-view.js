@@ -76,7 +76,7 @@ const createTypeImageTemplate = (currentType, availableOffers) => Object.values(
     `;
   }).join('');
 
-  const createDestinationListTemplate = (availableDestinations) => Object.values(availableDestinations)
+const createDestinationListTemplate = (availableDestinations) => Object.values(availableDestinations)
   .map((destination) => `<option value="${destination.name}"></option>`).join('');
 
 const createPointEditorTemplate = (data, isPointNew, availableDestinations, availableOffers) => {
