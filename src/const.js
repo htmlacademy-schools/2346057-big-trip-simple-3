@@ -15,4 +15,29 @@ const SORT_TYPE = {
   PRICE: 'price',
 };
 
-export { TRIP_EVENT_TYPES, SORT_TYPE };
+const USER_ACTION = {
+  UPDATE_TASK: 'UPDATE_TASK',
+  ADD_TASK: 'ADD_TASK',
+  DELETE_TASK: 'DELETE_TASK',
+};
+
+const UPDATE_TYPE = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
+const FILTER_TYPE = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+};
+
+const DESTINATION_NAMES = [
+  'Moscow',
+  'SPB',
+  'Voroneg',
+  'Tula',
+  'Orel',
+];
+
+export { DESTINATION_NAMES, FILTER_TYPE, TRIP_EVENT_TYPES, SORT_TYPE, USER_ACTION, UPDATE_TYPE };

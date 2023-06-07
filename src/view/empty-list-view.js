@@ -1,42 +1,22 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
-const createEmptyListTemplate = () => {
-  const filter = document.querySelector('input[name="trip-filter"]:checked').value;
+const createEmptyListTemplate = (filter) => {
   if (filter === 'everything') {
-    return `
-    <p class="trip-events__msg">Click New Event to create your first point</p>
-    `;
-  } else if (filter === 'past') {
-    return `
-    <p class="trip-events__msg">There are no past events now</p>
-    `;
-  } else if (filter === 'future') {
-    return `
-    <p class="trip-events__msg">There are no future events now</p>
-    `;
+    return '<p class="trip-events__msg">Click New Event to create your first point</p>';
   }
-  throw new Error('Unexpected filter');
+  return '<p class="trip-events__msg">There are no future events now</p>';
 };
 
 class EmptyListView extends AbstractView {
-  #filter;
+  #currentFilter;
 
   constructor(filter) {
     super();
-    this.#filter = filter;
-  }
-
-  get filter() {
-    return this.#filter;
-  }
-
-  set filter(newFilter) {
-    this.#filter = newFilter;
-    this.removeElement();
+    this.#currentFilter = filter;
   }
 
   get template() {
-    return createEmptyListTemplate();
+    return createEmptyListTemplate(this.#currentFilter);
   }
 }
 
