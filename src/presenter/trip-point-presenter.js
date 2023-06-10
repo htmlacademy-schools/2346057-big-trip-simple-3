@@ -100,19 +100,19 @@ export default class TripPointPresenter {
     this.#pointEditorComponent.shake(resetFormState);
   };
 
-  #replaceFormToPoint = () => {
-    this.#pointEditorComponent.reset(this.#point);
-    replace(this.#pointComponent, this.#pointEditorComponent);
-    this.#pointEditorComponent.removeEscKeydownListener();
-    this.#mode = Mode.DEFAULT;
-  };
-
   #replacePointToForm = () => {
     this.#pointEditorComponent.setEscKeydownListener(this.#replaceFormToPoint);
     this.#changeMode();
     this.#mode = Mode.EDITING;
 
     replace(this.#pointEditorComponent, this.#pointComponent);
+  };
+
+  #replaceFormToPoint = () => {
+    this.#pointEditorComponent.reset(this.#point);
+    replace(this.#pointComponent, this.#pointEditorComponent);
+    this.#pointEditorComponent.removeEscKeydownListener();
+    this.#mode = Mode.DEFAULT;
   };
 
   #handleFormSubmit = (update) => {

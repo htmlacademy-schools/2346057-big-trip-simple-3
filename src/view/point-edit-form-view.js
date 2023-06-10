@@ -258,9 +258,12 @@ export default class PointEditFormView extends AbstractStatefulView {
   };
 
   #changeDateFrom = ([userDate]) => {
-    this._setState({
-      dateFrom: userDate,
-    });
+    if (userDate) {
+      this._setState({
+        dateFrom: userDate.toISOString(),
+      });
+      this.#toDatepicker.set('minDate', userDate);
+    }
   };
 
   #setDateFromPicker = () => {
