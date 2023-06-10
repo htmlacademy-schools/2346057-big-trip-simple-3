@@ -251,7 +251,7 @@ export default class PointEditFormView extends AbstractStatefulView {
         enableTime: true,
         dateFormat: 'Y/m/d H:i',
         defaultDate: this._state.dateTo,
-        minDate: convertToBasicime(this._state.dateFrom),
+        minDate: this._state.dateFrom,
         onChange: this.#changeDateTo,
       },
     );
